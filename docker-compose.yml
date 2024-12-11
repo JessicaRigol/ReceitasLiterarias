@@ -1,4 +1,4 @@
-﻿version: '3.8'
+version: '3.8'
 services:
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -19,10 +19,12 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=db;Database=ReceitasLiterarias;User=sa;Password=MinhaSenhaForte@123;
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=tcp:yourserver.database.windows.net,1433;Initial Catalog=ReceitasLiterarias;User=sa;Password=yourpassword;Encrypt=True;
+      - PORT=5000
     depends_on:
       - db
 
 volumes:
   sqlserver-data:
+
