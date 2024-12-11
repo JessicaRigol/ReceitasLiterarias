@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 // Get the connection string from environment variables or configuration
 var connectionString = builder.Configuration.GetValue<string>("DB_CONNECTION_STRING");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configura o Kestrel para escutar na porta 5000
 builder.WebHost.ConfigureKestrel(options =>
