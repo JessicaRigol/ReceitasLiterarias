@@ -11,6 +11,7 @@ services:
     volumes:
       - sqlserver-data:/var/opt/mssql
 
+<<<<<<< HEAD
   app:
     build:
       context: .
@@ -24,5 +25,7 @@ services:
     depends_on:
       - db
 
+=======
+>>>>>>> 41822f17f6773ecb40925744b6888e33e8c44ce4
 volumes:
   sqlserver-data:
