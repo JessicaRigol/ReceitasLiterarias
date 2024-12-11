@@ -6,10 +6,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Get the connection string from environment variables or configuration
+// Get the connection string from appsettings.json
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
+// Configura o Kestrel para escutar na porta 5000
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5000); // Configura a aplicação para escutar na porta 5000
+});
 
 var app = builder.Build();
 
@@ -36,9 +42,7 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    
-    // This will apply any pending migrations and create the database if it doesn't exist
-    dbContext.Database.Migrate();
+    dbContext.Database.Migrate(); // Ensures the database is created or updated
 }
 
 app.Run();
