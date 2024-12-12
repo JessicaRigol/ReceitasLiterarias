@@ -38,11 +38,18 @@ app.MapControllerRoute(
 
 app.MapControllers();
 
-// Apply migrations to the database
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.Migrate(); // Ensures the database is created or updated
+    try
+    {
+        dbContext.Database.Migrate(); // Aplica migrations
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Erro ao aplicar migrations: {ex.Message}");
+        throw;
+    }
 }
 
 app.Run();
