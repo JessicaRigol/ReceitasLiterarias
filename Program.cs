@@ -6,9 +6,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Get the connection string from appsettings.json
+// Prioriza a variável de ambiente DB_CONNECTION_STRING no ambiente de produção
+var connectionString = builder.Configuration.GetValue<string>("DB_CONNECTION_STRING");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    // Se a variável de ambiente não estiver definida, utiliza o appsettings.json
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+}
+
+// Configura o DbContext com a string de conexão
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    options.UseSqlServer(connectionString)
 );
 
 // Configura o Kestrel para escutar na porta 5000
@@ -38,12 +47,15 @@ app.MapControllerRoute(
 
 app.MapControllers();
 
+// Aplicar as migrations ao banco de dados
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     try
     {
+        Console.WriteLine("Aplicando migrations...");
         dbContext.Database.Migrate(); // Aplica migrations
+        Console.WriteLine("Migrations aplicadas com sucesso.");
     }
     catch (Exception ex)
     {
