@@ -20,7 +20,7 @@ services:
       - "5000:5000"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Server=db;Database=ReceitasLiterarias;User=sa;Password=MinhaSenhaForte@123;
+      - ConnectionStrings__DefaultConnection=Server=tcp:receitasliterarias.database.windows.net,1433;Initial Catalog=ReceitasLiterariasDB;Persist Security Info=False;User ID=adminJess;Password=MinhaSenhaForte@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
       - PORT=5000
     depends_on:
       - db
